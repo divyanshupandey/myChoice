@@ -1,2 +1,2 @@
 # myChoice
-for then choice of users to vote for their  favorite
+User's choice for their favorite
