@@ -16,7 +16,7 @@ import {Container, Row, Col} from 'react-grid-system';
 import FormsyText from 'formsy-material-ui/lib/FormsyText';
 import Request from 'superagent';
 import Dialog from 'material-ui/Dialog';
-import Dashboard from './../dashboard';
+import EntertainmentDashboard from './../entertainmentDashboard';
 const styles = {
   msgStyle: {
     marginTop : 7,
@@ -100,7 +100,8 @@ export default class Opinion extends React.Component {
     open : false,
     otpSubmit : false,
     token : '',
-    img : './../assets/images/signin.jpg'
+    img : './../assets/images/signin.jpg',
+    guest : false
 };
 this.handleSubmit = this.handleSubmit.bind(this);
 this.handleOTPSubmit = this.handleOTPSubmit.bind(this);
@@ -111,8 +112,12 @@ this.enableOTPButton = this.enableOTPButton.bind(this);
 this.disableOTPButton = this.disableOTPButton.bind(this);
 this.enableSignUPButton = this.enableSignUPButton.bind(this);
 this.disableSignUPButton = this.disableSignUPButton.bind(this);
+this.handleGuestRequest = this.handleGuestRequest.bind(this);
   }
-
+  handleGuestRequest()
+  {
+  this.setState({guest:true});
+  }
   handleSubmit()
   {
     let url =`/opinion/login`;
@@ -321,7 +326,13 @@ this.setState({errMsgSignUP : '',errMsg: ''});
     });
     if(this.state.errMsgSignUP==='OTP varified' || this.state.errMsg==='varified' )
     {
-      return(<Dashboard logout={this.logout.bind(this)}/>);
+      return(<EntertainmentDashboard logout={this.logout.bind(this)}
+        guest={this.state.guest}/>);
+    }
+    if(this.state.guest)
+    {
+      return(<EntertainmentDashboard logout={this.logout.bind(this)}
+      guest={this.state.guest} />);
     }
 
     return(
@@ -400,7 +411,7 @@ this.setState({errMsgSignUP : '',errMsg: ''});
           <RaisedButton
           label={'GUEST'} primary={true} fullWidth={true}
           type='submit'
-          onClick={this.handleSubmit}
+          onClick={this.handleGuestRequest}
           style={{marginLeft : '20%' , marginTop : '3%',
           minWidth:'60%'}}/>
           <h5 style={{color: 'grey',margin: '0.5% 32%',LetterSpacing: '2px'}}>
