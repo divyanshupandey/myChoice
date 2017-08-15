@@ -1,2 +1,2 @@
-import Dashboard from './Dashboard.jsx';
-export default Dashboard;
+import EntertainmentDashboard from './EntertainmentDashboard.jsx';
+export default EntertainmentDashboard;
