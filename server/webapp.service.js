@@ -5,7 +5,8 @@ const service = require('./service');
 
 function setupWebAppRESTRoutes(app) {
     app.use(expressJWT({secret : 'div'}).unless({path :
-   ['/opinion/otp' , '/opinion/signup', '/opinion/login','/opinion/','/opinion']
+   ['/opinion/otp' , '/opinion/signup', '/opinion/login','/opinion/','/opinion',
+    '/opinion/guest']
    }))
 
   app.use('/opinion', require(path.join(__dirname, 'opinion')));

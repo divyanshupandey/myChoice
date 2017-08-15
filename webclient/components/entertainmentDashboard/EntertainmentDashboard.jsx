@@ -98,6 +98,7 @@ export default class Dashboard extends React.Component {
 		 user: 'admin',eventList: [],partyList: []};
 
      this.percentCalc = this.percentCalc.bind(this);
+		 this.guestShow = this.guestShow.bind(this);
 		this.updateEventList = this.updateEventList.bind(this);
 
 		}
@@ -122,6 +123,36 @@ export default class Dashboard extends React.Component {
 				console.log('after adding the event'+this.state.eventList);
 			});
 		}
+		guestShow()
+		{
+			let url = `/opinion/guest`;
+			this.setState({user : 'guest'})
+	    Request
+	    .get(url)
+			.end((err, res) => {
+				if(err) {
+				this.setState({errmsg: res.body, loading: 'hide'});
+			}
+
+			else {
+				let response = JSON.parse(res.text);
+				if(response.length === 0)
+				{
+					this.setState({domainList: [], loading: 'hide'});
+				}
+				else {
+					this.setState({partyList: response.partyList});
+
+					let eList=this.percentCalc(response.eventList);
+
+					this.setState({eventList: eList, loading: 'hide'});
+										console.log(this.state.eventList);
+										console.log(this.state.partyList);
+				}
+			}
+		});
+		}
+
 		show()
 		{
 			let myToken = localStorage.getItem('token');
@@ -251,9 +282,20 @@ export default class Dashboard extends React.Component {
 			return ([conceptColor,intentColor,docsColor]);
 		}
 
+		componentWillMount(){
+	      document.body.style.overflow = "initial";
+	  }
+
 		componentDidMount()
 		{
-			this.show();
+		if(this.props.guest)
+		{
+		this.guestShow();
+		}
+		else
+		{
+		this.show();
+		}
 		}
 
 		onLike(obj)
@@ -340,19 +382,6 @@ export default class Dashboard extends React.Component {
 		}
 
 
-		freshlyIndex(domain)
-		{
-			// console.log('inside Index refresh '+domain);
-			let url = `/domain/` + domain + `/index`;
-			Request
-			.post(url)
-			.send(domain)
-			.end((err, res) => {
-				if(err) {
-					this.setState({errmsg: res.body});
-				}
-			});
-		}
 
 		updateData(obj)
 		{
@@ -364,20 +393,6 @@ export default class Dashboard extends React.Component {
 			response = this.percentCalc(response);
 			this.setState({eventList : response});
 			console.log('after adding the event'+this.state.eventList);
-		}
-
-		addDocument(doc)
-		{
-			let url = `/domain/`+doc.domainName+`/crawl` ;
-			Request
-			.post(url)
-			.send(doc.docs)
-			.end((err, res) => {
-				if(err) {
-					this.setState({errmsg: res.body});
-				}
-				console.log(res);
-			});
 		}
 
 		addParty(partyObj)
@@ -402,8 +417,14 @@ export default class Dashboard extends React.Component {
 
 		logout()
       {
+			if(this.state.user=='guest')
+			{
+			this.props.logout();
+			}
+			else{
 			localStorage.removeItem('token');
 			this.props.logout();
+			}
 			}
 		render() {
 			let prevFlag=false;
@@ -514,6 +535,22 @@ export default class Dashboard extends React.Component {
 							</Col>)})}
 			</Row>)})
 		}
+		const account=[];
+		if(this.state.user=='guest')
+		{
+		account.push(<Link to='/'>
+							  <FlatButton label="Home" secondary={true} style={{float : 'right', marginTop : 10}}
+								onClick={this.logout.bind(this)}
+								/>
+								</Link>);
+		}
+		else{
+	   	account.push(<Link to='/'>
+								<FlatButton label="Logout" secondary={true} style={{float : 'right', marginTop : 10}}
+								onClick={this.logout.bind(this)}
+								/>
+								</Link>);
+		 }
 			return (
 				<div style={fonts}>
 				{
@@ -530,11 +567,7 @@ export default class Dashboard extends React.Component {
 						<Row  style={{marginLeft : 0, marginRight : 0}}>
 						<Col lg={11} md={11} sm={12} xs={12}><h1>OUR POLITICAL EVENTS</h1></Col>
 						<Col lg={1} md={1} sm={12} xs={12} >
-					  <Link to='/'>
-					  <FlatButton label="Logout" secondary={true} style={{float : 'right', marginTop : 10}}
-						onClick={this .logout.bind(this)}
-						/>
-						</Link>
+            {account}
 						</Col>
 						</Row>
 						{allEvents}

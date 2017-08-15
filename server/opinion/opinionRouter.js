@@ -190,6 +190,36 @@ router.post('/event', function(req, res) {
   }
 });
 
+//get all events and parties for guest
+router.get('/guest', function(req, res) {
+  try {
+      logger.debug(
+        "going to fetch all events and parties");
+    opinionCtrl.fetchEventsAndParties({email :'guestuserinmychoice@gmail.com'})
+    .then(function(obj) {
+        logger.debug(
+          "Successfully retrieved all details to show ----->",
+          obj);
+        res.send(obj);
+        return;
+      },
+      function(err) {
+        logger.error(
+          "Encountered error in retriving events and parties ",
+          err);
+        res.send(err);
+        return;
+      })
+
+  } catch (err) {
+    logger.error("Caught a error in retriving events and parties ", err);
+    res.status(500).send({
+      error: "Something went wrong, please try later..!"
+    });
+    return;
+  }
+});
+
 //get all events and parties
 router.get('/:user', function(req, res) {
   try {

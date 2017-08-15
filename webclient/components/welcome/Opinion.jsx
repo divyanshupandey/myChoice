@@ -229,7 +229,9 @@ this.handleGuestRequest = this.handleGuestRequest.bind(this);
   {
     this.emailFetch();
   }
-
+  componentWillMount(){
+      document.body.style.overflow = "hidden";
+  }
   handleChange = (value) => {
   this.setState({
     slideIndex: value,
@@ -281,7 +283,8 @@ handleClose = () => {
 
 logout()
   {
-this.setState({errMsgSignUP : '',errMsg: ''});
+this.setState({errMsgSignUP : '',errMsg: '',guest: false});
+document.body.style.overflow = "hidden";
   }
 
   render()
