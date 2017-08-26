@@ -40,10 +40,10 @@ const imgStyle = (screenClass) => {
   return { width: '280px', height: '280'};
 };
 const divStyle = (screenClass) => {
-  if (screenClass === 'xl') {return { width: '57%',margin:"10% auto auto",
-  backgroundColor:'white'};}
-  if (screenClass === 'lg') {return { width: '56.7%',margin:"9% 10% 10% 22.9%",
-  backgroundColor:'white'};}
+  if (screenClass === 'xl') {return { width: '42%',margin:"9% 10% 10% 30.5%",
+  backgroundColor:'white',borderRadius : '15px'};}
+  if (screenClass === 'lg') {return { width: '40%',margin:"9% 10% 10% 31%",
+  backgroundColor:'white',borderRadius : '15px'};}
   if (screenClass === 'md') {return { width: '350px',margin:"2% auto auto" };}
   if (screenClass === 'sm') {return { width: '320px',margin:"2% auto auto" };}
   return { width: '280px',margin:"2% auto auto"};
@@ -57,19 +57,30 @@ const backStyle = (screenClass) => {
   return { height:'100%' };
 };
 const tfont={
-  fontSize:'15px'
+  fontSize: '15px'
 };
-const tabStyle={
-  backgroundColor:'grey'
+const tabStyleL={
+  backgroundColor: 'grey',
+  borderTopLeftRadius: '15px'
 };
-
+const tabStyleR={
+  backgroundColor: 'grey',
+  borderTopRightRadius: '15px'
+};
+const roundCornerStyle={
+  borderRadius: '15px !important'
+};
 const customContentStyle = {
   width: '50%',
   height: '30%',
   maxWidth: 'none'
 };
+const loginIconStyle = {
+  color:'grey',
+  margin: '7px 0px 0px -15px'
+}
 const inputStyle = {
-border: '1px solid grey',
+border: '1px solid #a6a6a6',
 width: '60%',
 margin: '1.5% 20%',
 borderRadius: '5px',
@@ -343,28 +354,34 @@ document.body.style.overflow = "hidden";
     backgroundSize: '1400px 662px',overflow: 'hidden',minHeight: '662px',
     backgroundRepeat: 'no-repeat'}}>
      <ScreenClassRender style={divStyle}>
-     <div >
+     <div style = {roundCornerStyle}>
      <Tabs
           onChange={this.handleChange}
           value={this.state.slideIndex}
+          style={roundCornerStyle}
+          tabItemContainerStyle = {{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
+          inkBarStyle = {{height : '3px'}}
         >
 
           <Tab
           icon={<ActionLock />}
           label="LOGIN"
            value={0}
-           style= {tabStyle}
+           style= {tabStyleL}
+           buttonStyle={{ borderRadius: '15px' , letterSpacing: '2px' }}
           />
           <Tab
            icon={<ContentCreate />}
            label="SIGNUP"
             value={1}
-            style= {tabStyle}
+            style= {tabStyleR}
+            buttonStyle={{ borderRadius: '15px' , letterSpacing: '2px' }}
             />
         </Tabs>
         <SwipeableViews
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
+          style={roundCornerStyle}
         >
           <div>
           <Formsy.Form
@@ -375,7 +392,7 @@ document.body.style.overflow = "hidden";
           >
           <Row style={inputStyle}>
           <Col lg={2} style={Label}>
-          <IconButton  iconStyle={{color:'grey',margin: '-18px 8px'}}
+          <IconButton  iconStyle={loginIconStyle}
           >
             <ActionLock />
           </IconButton>
@@ -395,7 +412,7 @@ document.body.style.overflow = "hidden";
 
           <Row style={inputStyle}>
           <Col lg={2} style={Label}>
-          <IconButton iconStyle={{color:'grey',margin: '-18px 8px'}}>
+          <IconButton iconStyle={loginIconStyle}>
             <CommunicationEmail />
           </IconButton>
           </Col>
@@ -417,7 +434,7 @@ document.body.style.overflow = "hidden";
           onClick={this.handleGuestRequest}
           style={{marginLeft : '20%' , marginTop : '3%',
           minWidth:'60%'}}/>
-          <h5 style={{color: 'grey',margin: '0.5% 32%',LetterSpacing: '2px'}}>
+          <h5 style={{color: 'grey',margin: '0.5% 25.4%',LetterSpacing: '2px'}}>
           You won't be able to like or comment as a guest</h5>
           </Row>
           <Row>
@@ -435,7 +452,7 @@ document.body.style.overflow = "hidden";
           >
           <Row style={inputStyle}>
           <Col lg={2} style={Label}>
-          <IconButton  iconStyle={{color:'grey',margin: '-18px 8px'}}
+          <IconButton  iconStyle={loginIconStyle}
           >
             <ActionAccountBox />
           </IconButton>
@@ -455,7 +472,7 @@ document.body.style.overflow = "hidden";
 
           <Row style={inputStyle}>
           <Col lg={2} style={Label}>
-          <IconButton  iconStyle={{color:'grey',margin: '-18px 8px'}}
+          <IconButton  iconStyle={loginIconStyle}
           >
             <CommunicationEmail />
           </IconButton>
@@ -481,7 +498,7 @@ document.body.style.overflow = "hidden";
 
           <Row style={inputStyle}>
           <Col lg={2} style={Label}>
-          <IconButton  iconStyle={{color:'grey',margin: '-18px 8px'}}
+          <IconButton  iconStyle={loginIconStyle}
           >
             <ActionLock />
           </IconButton>
@@ -500,7 +517,7 @@ document.body.style.overflow = "hidden";
           </Row>
           <Row style={inputStyle}>
           <Col lg={2} style={Label}>
-          <IconButton  iconStyle={{color:'grey',margin: '-18px 8px'}}
+          <IconButton  iconStyle={loginIconStyle}
           >
             <ActionLock />
           </IconButton>
