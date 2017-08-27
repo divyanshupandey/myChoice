@@ -8,6 +8,7 @@ import Notification from './Notification.jsx';
 import {Container, Col, Row, Visible} from 'react-grid-system';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
+import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {blue300, lime800, lightGreen500,lightBlue300} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
@@ -16,6 +17,11 @@ import jwt_decode from 'jwt-decode';
 import {Link} from 'react-router';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconMenu from 'material-ui/IconMenu';
+import LinearProgress from 'material-ui/LinearProgress';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
 const errStyle = (screenClass) => {
 	if (screenClass === 'xl') {return { width:700,margin: "20% auto 5%",textAlign:"left" };}
@@ -95,7 +101,8 @@ export default class Dashboard extends React.Component {
 		super(props);
 		this.state = {
 			domainList: [], canSubmit: false, errmsg: '', loading: 'loading', pageNum: 1,
-		 user: 'admin',eventList: [],partyList: []};
+		 user: 'admin',eventList: [],partyList: [], logoutText: 'Home',
+         img : './../assets/images/icon.png'};
 
      this.percentCalc = this.percentCalc.bind(this);
 		 this.guestShow = this.guestShow.bind(this);
@@ -158,7 +165,7 @@ export default class Dashboard extends React.Component {
 			let myToken = localStorage.getItem('token');
 			let userEmail = jwt_decode(myToken).email
 			let url = `/opinion/`+userEmail;
-			this.setState({user : jwt_decode(myToken).user})
+			this.setState({user : jwt_decode(myToken).user, logoutText: 'Logout'})
 	    let token='Bearer '+myToken;
 	    Request
 	    .get(url)
@@ -427,114 +434,6 @@ export default class Dashboard extends React.Component {
 			}
 			}
 		render() {
-			let prevFlag=false;
-			let nextFlag=false;
-			const smallNav=()=>{
-				return(<Row md={12} sm={12} xs={12} style={{marginBotton:20}}>
-
-					<Col md={4} sm={4} xs={4} style={{float:"left"}}>
-					<IconButton style={iconStyle.leftIconAvg} label="prev" disabled={prevFlag} data-id="prev"
-					iconStyle={iconStyle.iconSize} onClick={this.onPageClick.bind(this)}>
-					<NavigationArrowBack style={iconStyle.large} color={'white'} />
-					</IconButton>
-					</Col>
-					<Col md={4} sm={4} xs={4} style={{float:"right"}}>
-					<IconButton style={iconStyle.rightIconAvg} label="next" disabled={nextFlag} data-id="next"
-					iconStyle={iconStyle.iconSize} onClick={this.onPageClick.bind(this)}>
-					<NavigationArrowForward style={iconStyle.large} color={'white'} />
-					</IconButton>
-					</Col>
-
-					</Row>)
-			}
-
-			let list=[];
-			let dList=this.state.domainList;
-			if(dList.length>0)
-			{
-				let pages = Math.ceil(dList.length/6);
-				let pageNow = this.state.pageNum;
-				if(pages === pageNow)
-				{
-					nextFlag = true;
-				}
-				if(this.state.pageNum === 1)
-				{
-					prevFlag = true;
-				}
-				if(pages === 1 || pages === pageNow)
-				{
-					list=[];
-					for(let i=6*(pageNow-1);i < this.state.domainList.length; i+=1)
-					{
-						list.push(this.state.domainList[i]);
-					}
-				}
-				else
-				{
-					list=[];
-					let foo=6*(pageNow-1);
-					for(let i=foo;i<(foo+6);i+=1)
-					{
-						list.push(this.state.domainList[i]);
-					}
-				}
-			}
-			const show = [], eList = [], pList = [];
-			{this.state.eventList.map((item,i) =>{
-				eList.push(item.eventName);
-			})}
-
-			{this.state.partyList.map((item,i) =>{
-				pList.push(item.name);
-			})}
-
-			if(this.state.user==='admin')
-			{
-				show.push(<Row style={{marginBottom : 15 , marginLeft : 0, marginRight : 0}}>
-									<Col lg={6} md={6} sm={6}>
-									<AddParty
-									addParty={this.addParty.bind(this)}
-                  partyList={pList}
-									style={{color: "#1976d2"}}/>
-									</Col>
-									<Col lg={6} md={6} sm={6}>
-									<AddEvent partyList={pList} eventList={eList}
-									addEvent={this.addEvent.bind(this)} style={{color: "#1976d2"}}/>
-									</Col>
-									</Row>);
-			}
-			else {
-				show.push(<Row style={{marginBottom : 15 , marginLeft : 0, marginRight : 0}}>
-					<h1>Thanks for your opinion</h1></Row>);
-			}
-			const allEvents=[];
-
-			{this.state.eventList.map((item,i) =>{
-				allEvents.push(
-					<Row style={{marginLeft : 0, marginRight : 0}}>
-					<Col lg={3} md={3} sm={12} xs={12} key={i}>
-          <Paper style={paperStyle}>
-					<h3>{item.eventName}</h3>
-			    <h3>{item.eventType} - {item.year}</h3>
-					<rd3.PieChart
-		  data={item.pieData}
-		  width={250}
-		  height={200}
-		  radius={50}
-		  innerRadius={20}
-		/>
-          </Paper>
-					</Col>
-					{item.parties.map((item1,i) =>{
-						return (
-							<Col lg={2} md={2} sm={12} xs={12} key={i}>
-							<DashboardEventShow party={item1} eventName={item.eventName}
-							onLike={this.onLike.bind(this)}/>
-
-							</Col>)})}
-			</Row>)})
-		}
 		const account=[];
 		if(this.state.user=='guest')
 		{
@@ -564,14 +463,121 @@ export default class Dashboard extends React.Component {
 					{
 						this.state.eventList.length!==0?<div>
 						<br/>
-						<Row  style={{marginLeft : 0, marginRight : 0}}>
-						<Col lg={11} md={11} sm={12} xs={12}><h1>OUR POLITICAL EVENTS</h1></Col>
-						<Col lg={1} md={1} sm={12} xs={12} >
-            {account}
+                        <Container style = {{margin : '16px', minWidth : '95%'}}>
+						<Row  style={{margin: '10px 0px 10px 0px'}}>
+						<Col lg={2} md={2} sm={6} xs={6} >
+                          <img src={this.state.img} style={{backgroundColor: 'grey',
+                            height: '40px', width: '100px', padding: '10px'}}/>
+                        </Col>
+						<Col lg={2} md={2} sm={6} xs={6} >
+                        <Row>
+                        <Col lg={12} md={12} sm={12} xs={12} >
+                         <h2 style={{color:'#f40049',fontFamily: 'Abril Fatface', marginTop: '5px', 
+                            marginBottom: '0px', float: 'left',letterSpacing: '1px',
+                            fontWeight:'Bolder', paddingLeft:'0px'}}>My choice</h2>
+                         </Col>
+                         <Col lg={12} md={12} sm={12} xs={12} >
+                         <h6 style={{color:'#f40049', marginTop: '2px', 
+                            marginBottom: '0px', float: 'left', paddingLeft:'0px'}}>Value your vote..</h6>
+                         </Col>
+                         </Row>
 						</Col>
-						</Row>
-						{allEvents}
-						{show}
+                        <Col lg={8} md={8} sm={12} xs={12} >
+                        <Toolbar>
+                           <ToolbarGroup>
+                              <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+                                 <i className ="fa fa-thumbs-o-up" style={{color : 'grey'}}></i>
+                                 </Col>
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '-5px',color : 'grey',
+                                 letterSpacing : '1px', paddingLeft : '2px'}}>
+                                 <b style={{fontSize : '10px'}}>
+                                 My Choice
+                                 </b>
+                                 </Col>
+                                 
+                              </Row>
+                           </ToolbarGroup>
+                           <ToolbarGroup>
+                              <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+                               
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+                                 <i className ="fa fa-crosshairs fa-lg " style={{color : 'grey'}}></i>
+                                 </Col>
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+                                 letterSpacing : '1px', paddingLeft : '8px'}}>
+                                 <b style={{fontSize : '10px'}}>
+                                 Mission
+                                 </b>
+                                 </Col>
+                               
+                              </Row>
+                           </ToolbarGroup>
+                           <ToolbarGroup>
+                              <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+                               
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+                                 <i className ="fa fa-trophy " style={{color : 'grey'}}></i>
+                                 </Col>
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+                                 letterSpacing : '1px', paddingLeft : '8px'}}>
+                                 <b style={{fontSize : '10px'}}>
+                                 Awards
+                                 </b>
+                                 </Col>
+                               
+                              </Row>
+                           </ToolbarGroup>
+                           <ToolbarGroup>
+                              <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+                               
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+                                 <i className ="fa fa-video-camera " style={{color : 'grey'}}></i>
+                                 </Col>
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+                                 letterSpacing : '1px', paddingLeft : '4px'}}>
+                                 <b style={{fontSize : '10px'}}>
+                                 Felicitation
+                                 </b>
+                                 </Col>
+                               
+                              </Row>
+                           </ToolbarGroup>
+                           <ToolbarGroup>
+                              <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+                               
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+                                 <i className ="fa fa-envelope-o fa-md" style={{color : 'grey'}} ></i>
+                                 </Col>
+                                 <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+                                 letterSpacing : '1px', paddingLeft : '8px'}}>
+                                 <b style={{fontSize : '10px'}}>
+                                 Contact
+                                 </b>
+                                 </Col>
+                               
+                              </Row>
+                              <ToolbarSeparator />
+                           </ToolbarGroup>
+                           <ToolbarGroup>
+                              <DropDownMenu value={2} iconStyle={{color: 'grey'}}>
+                              <MenuItem value={1} label="Top Movies 2016" primaryText="2016" />
+                              <MenuItem value={2} label="Top Movies 2017" primaryText="2017" />
+                              <MenuItem value={3} label="Top Movies 2017" primaryText="2018" />
+                              </DropDownMenu>
+                              <IconMenu
+                               iconButtonElement={<IconButton><ActionAccountCircle /></IconButton>}
+                                  anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                                  iconStyle={{color: 'grey'}}
+                                  >
+                                  <MenuItem onClick={this.logout.bind(this)} primaryText={this.state.logoutText}/>
+                                </IconMenu>
+                           </ToolbarGroup>
+                        </Toolbar>
+                        </Col>
+                        </Row>
+                        </Container>
 						</div>:
 						<ScreenClassRender style={errStyle}>
 						<div style={errStyle} >
