@@ -16,7 +16,11 @@ import {Container, Row, Col} from 'react-grid-system';
 import FormsyText from 'formsy-material-ui/lib/FormsyText';
 import Request from 'superagent';
 import Dialog from 'material-ui/Dialog';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import BottomNavigationItem from 'material-ui/BottomNavigation';
 import EntertainmentDashboard from './../entertainmentDashboard';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 const styles = {
   msgStyle: {
     marginTop : 7,
@@ -355,6 +359,93 @@ document.body.style.overflow = "hidden";
     backgroundRepeat: 'no-repeat'}}>
      <ScreenClassRender style={divStyle}>
      <div style = {roundCornerStyle}>
+      <Toolbar>
+        <ToolbarGroup>
+        <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+          <i className ="fa fa-thumbs-o-up" style={{color : 'grey'}}></i>
+          </Col>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+           letterSpacing : '1px', paddingLeft : '2px'}}>
+          <b style={{fontSize : '10px'}}>
+            My Choice
+          </b>
+          </Col>
+          </Row>
+          </ToolbarGroup>
+                  <ToolbarGroup>
+        <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+          <i className ="fa fa-crosshairs fa-lg " style={{color : 'grey'}}></i>
+          </Col>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+           letterSpacing : '1px', paddingLeft : '6px'}}>
+          <b style={{fontSize : '10px'}}>
+            Mission
+          </b>
+          </Col>
+          </Row>
+          </ToolbarGroup>
+                            <ToolbarGroup>
+        <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+          <i className ="fa fa-trophy " style={{color : 'grey'}}></i>
+          </Col>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+           letterSpacing : '1px', paddingLeft : '6px'}}>
+          <b style={{fontSize : '10px'}}>
+            Awards
+          </b>
+          </Col>
+          </Row>
+          </ToolbarGroup>
+                                     <ToolbarGroup>
+        <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+          <i className ="fa fa-video-camera " style={{color : 'grey'}}></i>
+          </Col>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+           letterSpacing : '1px', paddingLeft : '2px'}}>
+          <b style={{fontSize : '10px'}}>
+            Felicitation
+          </b>
+          </Col>
+          </Row>
+          </ToolbarGroup>
+                  <ToolbarGroup>
+         <Row md={12} sm={12} xs={12} style={{marginBottom:4}}>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '10px'}}>
+          <i className ="fa fa-envelope-o fa-md" style={{color : 'grey'}} ></i>
+          </Col>
+
+          <Col md={12} sm={12} xs={12} style={{marginTop: '-2px',color : 'grey',
+           letterSpacing : '1px', paddingLeft : '6px'}}>
+          <b style={{fontSize : '10px'}}>
+            Contact
+          </b>
+          </Col>
+          </Row>
+                    <ToolbarSeparator />
+          </ToolbarGroup>
+        <ToolbarGroup>
+
+   
+        <DropDownMenu value={2} style = {{color: 'grey !important'}}>
+        <MenuItem value={1} label="Top Movies 2016" primaryText="2016" />
+        <MenuItem value={2} label="Top Movies 2017" primaryText="2017" />
+        <MenuItem value={3} label="Top Movies 2017" primaryText="2018" />
+      </DropDownMenu>
+          </ToolbarGroup>
+      </Toolbar>
      <Tabs
           onChange={this.handleChange}
           value={this.state.slideIndex}
